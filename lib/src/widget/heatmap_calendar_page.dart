@@ -26,6 +26,9 @@ class HeatMapCalendarPage extends StatelessWidget {
   /// The double value of every block's fontSize.
   final double? fontSize;
 
+  /// The double value of emoji's fontSize, if emojisets are used.
+  final double? emojiSize;
+
   /// The datasets which fill blocks based on its value.
   final Map<DateTime, int>? datasets;
 
@@ -78,6 +81,7 @@ class HeatMapCalendarPage extends StatelessWidget {
     this.datasets,
     this.colorsets,
     this.emojisets,
+    this.emojiSize,
     this.borderRadius,
     this.onClick,
   })  : separatedDate = DateUtil.separatedMonth(baseDate),
@@ -100,6 +104,7 @@ class HeatMapCalendarPage extends StatelessWidget {
             defaultColor: defaultColor,
             colorsets: colorsets,
             emojisets: emojisets,
+            emojiSize: emojiSize,
             textColor: textColor,
             borderRadius: borderRadius,
             flexible: flexible,
