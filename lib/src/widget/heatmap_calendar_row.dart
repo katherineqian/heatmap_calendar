@@ -39,6 +39,9 @@ class HeatMapCalendarRow extends StatelessWidget {
   /// This is the emoji that should be shown in place of a number.
   final Map<int, String>? emojisets;
 
+  /// The double value of emoji's fontSize, if emojisets are used.
+  final double? emojiSize;
+
   /// The double value of [HeatMapContainer]'s borderRadius
   final double? borderRadius;
 
@@ -79,6 +82,7 @@ class HeatMapCalendarRow extends StatelessWidget {
     this.defaultColor,
     this.colorsets,
     this.emojisets,
+    this.emojiSize,
     this.textColor,
     this.borderRadius,
     this.flexible,
@@ -154,13 +158,14 @@ class HeatMapCalendarRow extends StatelessWidget {
                         datasets?[DateTime(startDate.year, startDate.month,
                             startDate.day + i - (startDate.weekday % 7))])
                 : null,
-            text: emojisets != null && isDateInDataset
+            customText: emojisets != null && isDateInDataset
                 ? DatasetsUtil.getEmoji(
                     emojisets,
                     datasets?[DateTime(startDate.year, startDate.month,
                         startDate.day + i - (startDate.weekday % 7))],
                   )
                 : null,
+            customTextSize: emojiSize,
           );
         }),
         super(key: key);

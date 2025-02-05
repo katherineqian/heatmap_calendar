@@ -43,6 +43,9 @@ class HeatMapCalendar extends StatefulWidget {
   /// The double value of week label's fontSize.
   final double? weekFontSize;
 
+  /// The double value of emoji's fontSize, if emojisets are used.
+  final double? emojiSize;
+
   /// The text color value of week labels.
   final Color? weekTextColor;
 
@@ -102,8 +105,9 @@ class HeatMapCalendar extends StatefulWidget {
     this.size = 42,
     this.fontSize,
     this.monthFontSize,
-    this.textColor,
     this.weekFontSize,
+    this.emojiSize,
+    this.textColor,
     this.weekTextColor,
     this.borderRadius,
     this.flexible = false,
@@ -232,6 +236,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             datasets: widget.datasets,
             colorsets: widget.colorsets,
             emojisets: widget.emojisets,
+            emojiSize: widget.emojiSize,
             borderRadius: widget.borderRadius,
             onClick: widget.onClick,
           ),

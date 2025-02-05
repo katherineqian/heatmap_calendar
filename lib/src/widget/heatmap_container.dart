@@ -11,7 +11,8 @@ class HeatMapContainer extends StatelessWidget {
   final Color? textColor;
   final EdgeInsets? margin;
   final bool? showText;
-  final String? text;
+  final String? customText;
+  final double? customTextSize;
   final Function(DateTime dateTime)? onClick;
 
   const HeatMapContainer({
@@ -26,7 +27,8 @@ class HeatMapContainer extends StatelessWidget {
     this.textColor,
     this.onClick,
     this.showText,
-    this.text,
+    this.customText,
+    this.customTextSize,
   }) : super(key: key);
 
   @override
@@ -47,10 +49,11 @@ class HeatMapContainer extends StatelessWidget {
             alignment: Alignment.center,
             child: (showText ?? true)
                 ? Text(
-                    text ?? date.day.toString(),
+                    customText ?? date.day.toString(),
                     style: TextStyle(
-                        color: textColor ?? const Color(0xFF8A8A8A),
-                        fontSize: fontSize),
+                      color: textColor ?? const Color(0xFF8A8A8A),
+                      fontSize: customText != null ? customTextSize : fontSize,
+                    ),
                   )
                 : null,
             decoration: BoxDecoration(
