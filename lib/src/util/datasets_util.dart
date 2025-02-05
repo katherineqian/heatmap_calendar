@@ -38,4 +38,16 @@ class DatasetsUtil {
 
     return colorsets?[result];
   }
+
+  /// Get emoji from [emojisets] using [dataValue].
+  ///  /// Get color from [colorsets] using [dataValue].
+  static String? getEmoji(Map<int, String>? emojisets, int? dataValue) {
+    int result = 0;
+
+    emojisets?.forEach((key, value) {
+      if (key <= (dataValue ?? 0)) result = key;
+    });
+
+    return emojisets?[result];
+  }
 }
