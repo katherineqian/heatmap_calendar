@@ -35,6 +35,10 @@ class HeatMapCalendarRow extends StatelessWidget {
   /// Be aware that first Color is the maximum value if [ColorMode] is [ColorMode.opacity].
   final Map<int, Color>? colorsets;
 
+  /// Same as colorsets, but map key values to text (emoji) instead of colors.
+  /// This is the emoji that should be shown in place of a number.
+  final Map<int, String>? emojisets;
+
   /// The double value of [HeatMapContainer]'s borderRadius
   final double? borderRadius;
 
@@ -74,6 +78,7 @@ class HeatMapCalendarRow extends StatelessWidget {
     this.fontSize,
     this.defaultColor,
     this.colorsets,
+    this.emojisets,
     this.textColor,
     this.borderRadius,
     this.flexible,

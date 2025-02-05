@@ -18,6 +18,10 @@ class HeatMapCalendar extends StatefulWidget {
   /// Also colorsets must have at least one color.
   final Map<int, Color> colorsets;
 
+  /// Same as colorsets, but map key values to text (emoji) instead of colors.
+  /// This is the emoji that should be shown in place of a number.
+  final Map<int, String>? emojisets;
+
   /// The double value of every block's borderRadius.
   final double? borderRadius;
 
@@ -90,6 +94,7 @@ class HeatMapCalendar extends StatefulWidget {
   const HeatMapCalendar({
     Key? key,
     required this.colorsets,
+    this.emojisets,
     this.colorMode = ColorMode.opacity,
     this.defaultColor,
     this.datasets,
@@ -226,6 +231,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             margin: widget.margin,
             datasets: widget.datasets,
             colorsets: widget.colorsets,
+            emojisets: widget.emojisets,
             borderRadius: widget.borderRadius,
             onClick: widget.onClick,
           ),
