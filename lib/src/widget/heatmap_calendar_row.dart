@@ -154,6 +154,18 @@ class HeatMapCalendarRow extends StatelessWidget {
                                   startDate.month,
                                   startDate.day + i - (startDate.weekday % 7))])
                       : null,
+                  text: emojisets != null &&
+                          (datasets?.keys.contains(DateTime(
+                                  startDate.year,
+                                  startDate.month,
+                                  startDate.day - startDate.weekday % 7 + i)) ??
+                              false)
+                      ? DatasetsUtil.getEmoji(
+                          emojisets,
+                          datasets?[DateTime(startDate.year, startDate.month,
+                              startDate.day + i - (startDate.weekday % 7))],
+                        )
+                      : null,
                 ),
         ),
         super(key: key);
