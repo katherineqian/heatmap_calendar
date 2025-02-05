@@ -107,6 +107,13 @@ class HeatMapCalendarRow extends StatelessWidget {
             );
           }
 
+          // Whether datasets has DateTime key which is equal to this HeatMapContainer's date.
+          final isDateInDataset = datasets?.keys.contains(DateTime(
+                  startDate.year,
+                  startDate.month,
+                  startDate.day - startDate.weekday % 7 + i)) ??
+              false;
+
           // If the day is not a empty one then create HeatMapContainer.
           return HeatMapContainer(
             // Given information about the week is that
@@ -126,11 +133,7 @@ class HeatMapCalendarRow extends StatelessWidget {
             // we have to color the matched HeatMapContainer.
             //
             // If datasets is null or doesn't contains the equal DateTime value, send null.
-            selectedColor: datasets?.keys.contains(DateTime(
-                        startDate.year,
-                        startDate.month,
-                        startDate.day - startDate.weekday % 7 + i)) ??
-                    false
+            selectedColor: isDateInDataset
                 // If colorMode is ColorMode.opacity,
                 ? colorMode == ColorMode.opacity
                     // Color the container with first value of colorsets
@@ -151,12 +154,7 @@ class HeatMapCalendarRow extends StatelessWidget {
                         datasets?[DateTime(startDate.year, startDate.month,
                             startDate.day + i - (startDate.weekday % 7))])
                 : null,
-            text: emojisets != null &&
-                    (datasets?.keys.contains(DateTime(
-                            startDate.year,
-                            startDate.month,
-                            startDate.day - startDate.weekday % 7 + i)) ??
-                        false)
+            text: emojisets != null && isDateInDataset
                 ? DatasetsUtil.getEmoji(
                     emojisets,
                     datasets?[DateTime(startDate.year, startDate.month,
