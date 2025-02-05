@@ -165,6 +165,7 @@ class HeatMapCalendarRow extends StatelessWidget {
                         startDate.day + i - (startDate.weekday % 7))],
                   )
                 : null,
+            customTextSize: emojiSize,
           );
         }),
         super(key: key);
