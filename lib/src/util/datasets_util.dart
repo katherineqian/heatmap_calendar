@@ -30,24 +30,19 @@ class DatasetsUtil {
 
   /// Get color from [colorsets] using [dataValue].
   static Color? getColor(Map<int, Color>? colorsets, int? dataValue) {
-    int result = 0;
-
-    colorsets?.forEach((key, value) {
-      if (key <= (dataValue ?? 0)) result = key;
-    });
-
-    return colorsets?[result];
+    final index = colorsets?.keys.firstWhere(
+      (key) => key == (dataValue ?? 0),
+      orElse: () => 0,
+    );
+    return colorsets?[index];
   }
 
   /// Get emoji from [emojisets] using [dataValue].
-  ///  /// Get color from [colorsets] using [dataValue].
   static String? getEmoji(Map<int, String>? emojisets, int? dataValue) {
-    int result = 0;
-
-    emojisets?.forEach((key, value) {
-      if (key <= (dataValue ?? 0)) result = key;
-    });
-
-    return emojisets?[result];
+    final index = emojisets?.keys.firstWhere(
+      (key) => key == (dataValue ?? 0),
+      orElse: () => 0,
+    );
+    return emojisets?[index];
   }
 }
