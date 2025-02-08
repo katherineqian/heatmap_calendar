@@ -171,7 +171,7 @@ class HeatMapCalendarRow extends StatelessWidget {
             customText: emojisets != null && isDateInEmojiDataset
                 ? DatasetsUtil.getEmoji(
                     emojisets,
-                    datasets?[DateTime(startDate.year, startDate.month,
+                    emojiDatasets?[DateTime(startDate.year, startDate.month,
                         startDate.day + i - (startDate.weekday % 7))],
                   )
                 : null,
