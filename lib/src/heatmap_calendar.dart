@@ -9,6 +9,9 @@ class HeatMapCalendar extends StatefulWidget {
   /// The datasets which fill blocks based on its value.
   final Map<DateTime, int>? datasets;
 
+  /// Datasets to be used for emojiSets only.
+  final Map<DateTime, int>? emojiDatasets;
+
   /// The color value of every block's default color.
   final Color? defaultColor;
 
@@ -101,6 +104,7 @@ class HeatMapCalendar extends StatefulWidget {
     this.colorMode = ColorMode.opacity,
     this.defaultColor,
     this.datasets,
+    this.emojiDatasets,
     this.initDate,
     this.size = 42,
     this.fontSize,
@@ -235,6 +239,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             margin: widget.margin,
             datasets: widget.datasets,
             colorsets: widget.colorsets,
+            emojiDatasets: widget.emojiDatasets,
             emojisets: widget.emojisets,
             emojiSize: widget.emojiSize,
             borderRadius: widget.borderRadius,
