@@ -32,6 +32,9 @@ class HeatMapCalendarPage extends StatelessWidget {
   /// The datasets which fill blocks based on its value.
   final Map<DateTime, int>? datasets;
 
+  /// Datasets to be used for emojiSets only.
+  final Map<DateTime, int>? emojiDatasets;
+
   /// The default background color value of every blocks
   final Color? defaultColor;
 
@@ -79,6 +82,7 @@ class HeatMapCalendarPage extends StatelessWidget {
     this.textColor,
     this.margin,
     this.datasets,
+    this.emojiDatasets,
     this.colorsets,
     this.emojisets,
     this.emojiSize,
@@ -112,6 +116,13 @@ class HeatMapCalendarPage extends StatelessWidget {
             maxValue: maxValue,
             onClick: onClick,
             datasets: Map.from(datasets ?? {})
+              ..removeWhere(
+                (key, value) => !(key.isAfter(date.keys.first) &&
+                        key.isBefore(date.values.first) ||
+                    key == date.keys.first ||
+                    key == date.values.first),
+              ),
+            emojiDatasets: Map.from(emojiDatasets ?? {})
               ..removeWhere(
                 (key, value) => !(key.isAfter(date.keys.first) &&
                         key.isBefore(date.values.first) ||

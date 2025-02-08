@@ -57,6 +57,9 @@ class HeatMapCalendarRow extends StatelessWidget {
   /// smaller or equal to [endDate].
   final Map<DateTime, int>? datasets;
 
+  /// Datasets to be used for emojiSets only.
+  final Map<DateTime, int>? emojiDatasets;
+
   /// ColorMode changes the color mode of blocks.
   ///
   /// [ColorMode.opacity] requires just one colorsets value and changes color
@@ -88,6 +91,7 @@ class HeatMapCalendarRow extends StatelessWidget {
     this.flexible,
     this.margin,
     this.datasets,
+    this.emojiDatasets,
     this.maxValue,
     this.onClick,
   })  : dayContainers = List<Widget>.generate(7,
@@ -113,6 +117,12 @@ class HeatMapCalendarRow extends StatelessWidget {
 
           // Whether datasets has DateTime key which is equal to this HeatMapContainer's date.
           final isDateInDataset = datasets?.keys.contains(DateTime(
+                  startDate.year,
+                  startDate.month,
+                  startDate.day - startDate.weekday % 7 + i)) ??
+              false;
+
+          final isDateInEmojiDataset = emojiDatasets?.keys.contains(DateTime(
                   startDate.year,
                   startDate.month,
                   startDate.day - startDate.weekday % 7 + i)) ??
@@ -158,7 +168,7 @@ class HeatMapCalendarRow extends StatelessWidget {
                         datasets?[DateTime(startDate.year, startDate.month,
                             startDate.day + i - (startDate.weekday % 7))])
                 : null,
-            customText: emojisets != null && isDateInDataset
+            customText: emojisets != null && isDateInEmojiDataset
                 ? DatasetsUtil.getEmoji(
                     emojisets,
                     datasets?[DateTime(startDate.year, startDate.month,
