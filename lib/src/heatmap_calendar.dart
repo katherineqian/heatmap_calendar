@@ -158,40 +158,52 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
 
   /// Header widget which shows left, right buttons and year/month text.
   Widget _header() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        // Previous month button.
-        if (widget.allowMonthChange)
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 14,
-            ),
-            onPressed: () => changeMonth(-1),
-          ),
+    return widget.allowMonthChange
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              // Previous month button.
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  size: 14,
+                ),
+                onPressed: () => changeMonth(-1),
+              ),
 
-        // Text which shows the current year and month
-        Text(
-          DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
-              ' ' +
-              (_currentDate?.year).toString(),
-          style: TextStyle(
-            fontSize: widget.monthFontSize ?? 12,
-          ),
-        ),
+              // Text which shows the current year and month
+              Text(
+                DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
+                    ' ' +
+                    (_currentDate?.year).toString(),
+                style: TextStyle(
+                  fontSize: widget.monthFontSize ?? 12,
+                ),
+              ),
 
-        // Next month button.
-        if (widget.allowMonthChange)
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_forward_ios,
-              size: 14,
+              // Next month button.
+
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                ),
+                onPressed: () => changeMonth(1),
+              ),
+            ],
+          )
+        : Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(24.0),
+            child: Text(
+              DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
+                  ' ' +
+                  (_currentDate?.year).toString(),
+              style: TextStyle(
+                fontSize: widget.monthFontSize ?? 12,
+              ),
             ),
-            onPressed: () => changeMonth(1),
-          ),
-      ],
-    );
+          );
   }
 
   Widget _weekLabel() {
