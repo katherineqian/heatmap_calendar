@@ -79,6 +79,9 @@ class HeatMapCalendar extends StatefulWidget {
   /// Paratmeter gives [DateTime] value of current month.
   final Function(DateTime)? onMonthChange;
 
+  /// Whether to show the arrows that allow users to change months.
+  final bool allowMonthChange;
+
   /// Show color tip which represents the color range at the below.
   ///
   /// Default value is true.
@@ -118,6 +121,7 @@ class HeatMapCalendar extends StatefulWidget {
     this.margin,
     this.onClick,
     this.onMonthChange,
+    this.allowMonthChange = true,
     this.showColorTip = true,
     this.colorTipHelper,
     this.colorTipCount,
@@ -144,6 +148,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
   }
 
   void changeMonth(int direction) {
+    if (!widget.allowMonthChange) return;
     setState(() {
       _currentDate =
           DateUtil.changeMonth(_currentDate ?? DateTime.now(), direction);
@@ -157,13 +162,14 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         // Previous month button.
-        IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 14,
+        if (widget.allowMonthChange)
+          IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              size: 14,
+            ),
+            onPressed: () => changeMonth(-1),
           ),
-          onPressed: () => changeMonth(-1),
-        ),
 
         // Text which shows the current year and month
         Text(
@@ -176,13 +182,14 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
         ),
 
         // Next month button.
-        IconButton(
-          icon: const Icon(
-            Icons.arrow_forward_ios,
-            size: 14,
+        if (widget.allowMonthChange)
+          IconButton(
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              size: 14,
+            ),
+            onPressed: () => changeMonth(1),
           ),
-          onPressed: () => changeMonth(1),
-        ),
       ],
     );
   }
