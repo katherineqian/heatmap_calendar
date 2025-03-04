@@ -194,7 +194,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
           )
         : Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
             child: Text(
               DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
                   ' ' +
