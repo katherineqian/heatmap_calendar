@@ -74,6 +74,9 @@ class HeatMapCalendar extends StatefulWidget {
   /// Paratmeter gives clicked [DateTime] value.
   final Function(DateTime)? onClick;
 
+  /// Whether to show the month label.
+  final bool showMonthLabel;
+
   /// Function that will be called when month is changed.
   ///
   /// Paratmeter gives [DateTime] value of current month.
@@ -120,6 +123,7 @@ class HeatMapCalendar extends StatefulWidget {
     this.flexible = false,
     this.margin,
     this.onClick,
+    this.showMonthLabel = true,
     this.onMonthChange,
     this.allowMonthChange = true,
     this.showColorTip = true,
@@ -192,18 +196,19 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
               ),
             ],
           )
-        : Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-            child: Text(
-              DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
-                  ' ' +
-                  (_currentDate?.year).toString(),
-              style: TextStyle(
-                fontSize: widget.monthFontSize ?? 12,
-              ),
-            ),
-          );
+        : widget.showMonthLabel
+            ? Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+                child: Text(
+                  DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
+                      ' ' +
+                      (_currentDate?.year).toString(),
+                  style: TextStyle(
+                    fontSize: widget.monthFontSize ?? 12,
+                  ),
+                ))
+            : const SizedBox.shrink();
   }
 
   Widget _weekLabel() {
