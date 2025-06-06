@@ -49,6 +49,9 @@ class HeatMapCalendar extends StatefulWidget {
   /// The double value of week label's fontSize.
   final double? weekFontSize;
 
+  /// The padding around the week label row.
+  final EdgeInsets? weekLabelPadding;
+
   /// The double value of emoji's fontSize, if emojisets are used.
   final double? emojiSize;
 
@@ -122,6 +125,7 @@ class HeatMapCalendar extends StatefulWidget {
     this.emojiSize,
     this.textColor,
     this.weekTextColor,
+    this.weekLabelPadding,
     this.borderRadius,
     this.border,
     this.flexible = false,
@@ -216,29 +220,32 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
   }
 
   Widget _weekLabel() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        for (String label in DateUtil.WEEK_LABEL.skip(1))
-          WidgetUtil.flexibleContainer(
-            widget.flexible ?? false,
-            false,
-            Container(
-              margin: EdgeInsets.only(
-                  left: widget.margin?.left ?? 2,
-                  right: widget.margin?.right ?? 2),
-              width: widget.size ?? 42,
-              alignment: Alignment.center,
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: widget.weekFontSize ?? 12,
-                  color: widget.weekTextColor ?? const Color(0xFF758EA1),
+    return Padding(
+      padding: widget.weekLabelPadding ?? EdgeInsets.zero,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          for (String label in DateUtil.WEEK_LABEL.skip(1))
+            WidgetUtil.flexibleContainer(
+              widget.flexible ?? false,
+              false,
+              Container(
+                margin: EdgeInsets.only(
+                    left: widget.margin?.left ?? 2,
+                    right: widget.margin?.right ?? 2),
+                width: widget.size ?? 42,
+                alignment: Alignment.center,
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: widget.weekFontSize ?? 12,
+                    color: widget.weekTextColor ?? const Color(0xFF758EA1),
+                  ),
                 ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
