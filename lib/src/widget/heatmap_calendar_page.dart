@@ -60,6 +60,9 @@ class HeatMapCalendarPage extends StatelessWidget {
   /// The double value of every block's borderRadius
   final double? borderRadius;
 
+  /// Optional border to be drawn for each block.
+  final Border? border;
+
   /// The integer value of the maximum value for the [datasets].
   ///
   /// Filtering [datasets] with [baseDate] using [DatasetsUtil.filterMonth].
@@ -87,6 +90,7 @@ class HeatMapCalendarPage extends StatelessWidget {
     this.emojisets,
     this.emojiSize,
     this.borderRadius,
+    this.border,
     this.onClick,
   })  : separatedDate = DateUtil.separatedMonth(baseDate),
         maxValue = DatasetsUtil.getMaxValue(
@@ -111,6 +115,7 @@ class HeatMapCalendarPage extends StatelessWidget {
             emojiSize: emojiSize,
             textColor: textColor,
             borderRadius: borderRadius,
+            border: border,
             flexible: flexible,
             margin: margin,
             maxValue: maxValue,

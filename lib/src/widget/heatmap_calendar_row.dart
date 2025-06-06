@@ -45,6 +45,9 @@ class HeatMapCalendarRow extends StatelessWidget {
   /// The double value of [HeatMapContainer]'s borderRadius
   final double? borderRadius;
 
+  /// Optional border to be drawn for each [HeatMapContainer] block.
+  final Border? border;
+
   /// Make block size flexible if value is true.
   final bool? flexible;
 
@@ -88,6 +91,7 @@ class HeatMapCalendarRow extends StatelessWidget {
     this.emojiSize,
     this.textColor,
     this.borderRadius,
+    this.border,
     this.flexible,
     this.margin,
     this.datasets,
@@ -141,6 +145,7 @@ class HeatMapCalendarRow extends StatelessWidget {
             fontSize: fontSize,
             textColor: textColor,
             borderRadius: borderRadius,
+            border: border,
             margin: margin,
             onClick: onClick,
             // If datasets has DateTime key which is equal to this HeatMapContainer's date,

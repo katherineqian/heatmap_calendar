@@ -28,6 +28,9 @@ class HeatMapCalendar extends StatefulWidget {
   /// The double value of every block's borderRadius.
   final double? borderRadius;
 
+  /// Optional border to be drawn for each block.
+  final Border? border;
+
   /// The date values of initial year and month.
   final DateTime? initDate;
 
@@ -120,6 +123,7 @@ class HeatMapCalendar extends StatefulWidget {
     this.textColor,
     this.weekTextColor,
     this.borderRadius,
+    this.border,
     this.flexible = false,
     this.margin,
     this.onClick,
@@ -267,6 +271,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             emojisets: widget.emojisets,
             emojiSize: widget.emojiSize,
             borderRadius: widget.borderRadius,
+            border: widget.border,
             onClick: widget.onClick,
           ),
           if (widget.showColorTip == true)
