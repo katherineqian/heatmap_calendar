@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import './data/heatmap_color_mode.dart';
 import './widget/heatmap_calendar_page.dart';
 import './widget/heatmap_color_tip.dart';
@@ -109,6 +110,11 @@ class HeatMapCalendar extends StatefulWidget {
   /// The double value of [HeatMapColorTip]'s tip container's size.
   final double? colorTipSize;
 
+  /// Which day the week should start?
+  /// weekStartsWith = 1 for Monday, ..., weekStartsWith = 7 for Sunday.
+  /// Default to 7 (the week starts wih Sunday).
+  final int weekStartsWith;
+
   const HeatMapCalendar({
     Key? key,
     required this.colorsets,
@@ -138,6 +144,7 @@ class HeatMapCalendar extends StatefulWidget {
     this.colorTipHelper,
     this.colorTipCount,
     this.colorTipSize,
+    this.weekStartsWith = 7,
   }) : super(key: key);
 
   @override
@@ -147,6 +154,8 @@ class HeatMapCalendar extends StatefulWidget {
 class _HeatMapCalendar extends State<HeatMapCalendar> {
   // The DateTime value of first day of the current month.
   DateTime? _currentDate;
+  // The list of localized labels for week days.
+  final List<String> _localizedWeekDayLabels = [];
 
   @override
   void initState() {
@@ -169,7 +178,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
   }
 
   /// Header widget which shows left, right buttons and year/month text.
-  Widget _header() {
+  Widget _header(BuildContext context) {
     return widget.allowMonthChange
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,14 +193,14 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
               ),
 
               // Text which shows the current year and month
-              Text(
-                DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
-                    ' ' +
-                    (_currentDate?.year).toString(),
-                style: TextStyle(
-                  fontSize: widget.monthFontSize ?? 12,
-                ),
-              ),
+              if (_currentDate != null)
+                Text(
+                  DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
+                      .format(_currentDate!),
+                  style: TextStyle(
+                    fontSize: widget.monthFontSize ?? 12,
+                  ),
+                ),  
 
               // Next month button.
 
@@ -219,28 +228,38 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             : const SizedBox.shrink();
   }
 
-  Widget _weekLabel() {
+  Widget _weekLabel(BuildContext context) {
+    if (_localizedWeekDayLabels.isEmpty && _currentDate != null) {
+      final firstWeekDayIndex =
+          -((_currentDate!.weekday - widget.weekStartsWith) % 7);
+      for (var i = firstWeekDayIndex; i < firstWeekDayIndex + 7; i++) {
+        _localizedWeekDayLabels.add(
+            DateFormat.E(Localizations.localeOf(context).languageCode)
+                .format(DateUtil.changeDay(_currentDate!, i)));
+      }
+    }
+
     return Padding(
       padding: widget.weekLabelPadding ?? EdgeInsets.zero,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          for (String label in DateUtil.WEEK_LABEL.skip(1))
-            WidgetUtil.flexibleContainer(
-              widget.flexible ?? false,
-              false,
-              Container(
-                margin: EdgeInsets.only(
-                    left: widget.margin?.left ?? 2,
-                    right: widget.margin?.right ?? 2),
-                width: widget.size ?? 42,
-                alignment: Alignment.center,
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: widget.weekFontSize ?? 12,
-                    color: widget.weekTextColor ?? const Color(0xFF758EA1),
-                  ),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        for (String label in _localizedWeekDayLabels)
+          WidgetUtil.flexibleContainer(
+            widget.flexible ?? false,
+            false,
+            Container(
+              margin: EdgeInsets.only(
+                  left: widget.margin?.left ?? 2,
+                  right: widget.margin?.right ?? 2),
+              width: widget.size ?? 42,
+              alignment: Alignment.center,
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: widget.weekFontSize ?? 12,
+                  color: widget.weekTextColor ?? const Color(0xFF758EA1),
+                ),
                 ),
               ),
             ),
@@ -261,8 +280,8 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          _header(),
-          _weekLabel(),
+          _header(context),
+          _weekLabel(context),
           HeatMapCalendarPage(
             baseDate: _currentDate ?? DateTime.now(),
             colorMode: widget.colorMode,
@@ -280,6 +299,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             borderRadius: widget.borderRadius,
             border: widget.border,
             onClick: widget.onClick,
+            weekStartsWith: widget.weekStartsWith,
           ),
           if (widget.showColorTip == true)
             HeatMapColorTip(

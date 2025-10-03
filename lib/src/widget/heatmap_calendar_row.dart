@@ -12,6 +12,11 @@ class HeatMapCalendarRow extends StatelessWidget {
   /// The integer value of end date of the week
   final DateTime endDate;
 
+  /// Which day the week should start?
+  /// weekStartsWith = 1 for Monday, ..., weekStartsWith = 7 for Sunday.
+  /// Default to 7 (the week starts wih Sunday).
+  final int weekStartsWith;
+
   /// The double value of every [HeatMapContainer]'s width and height.
   final double? size;
 
@@ -82,6 +87,7 @@ class HeatMapCalendarRow extends StatelessWidget {
     Key? key,
     required this.startDate,
     required this.endDate,
+    required this.weekStartsWith,
     required this.colorMode,
     this.size,
     this.fontSize,
@@ -108,10 +114,10 @@ class HeatMapCalendarRow extends StatelessWidget {
             (i) {
           if ((startDate == DateUtil.startDayOfMonth(startDate) &&
                   endDate.day - startDate.day != 7 &&
-                  i < (startDate.weekday % 7)) ||
+                  i < ((startDate.weekday - weekStartsWith) % 7)) ||
               (endDate == DateUtil.endDayOfMonth(endDate) &&
                   endDate.day - startDate.day != 7 &&
-                  i > (endDate.weekday % 7))) {
+                  i > ((endDate.weekday - weekStartsWith) % 7))) {
             return Container(
               width: size ?? 42,
               height: size ?? 42,
@@ -119,18 +125,16 @@ class HeatMapCalendarRow extends StatelessWidget {
             );
           }
 
-          // Whether datasets has DateTime key which is equal to this HeatMapContainer's date.
-          final isDateInDataset = datasets?.keys.contains(DateTime(
-                  startDate.year,
-                  startDate.month,
-                  startDate.day - startDate.weekday % 7 + i)) ??
-              false;
+          // Calculate the correct date for this cell
+          final currentDate = DateTime(startDate.year, startDate.month,
+              startDate.day - (startDate.weekday - weekStartsWith) % 7 + i);
 
-          final isDateInEmojiDataset = emojiDatasets?.keys.contains(DateTime(
-                  startDate.year,
-                  startDate.month,
-                  startDate.day - startDate.weekday % 7 + i)) ??
-              false;
+          // Whether datasets has DateTime key which is equal to this HeatMapContainer's date.
+          final isDateInDataset = datasets?.keys.contains(currentDate) ?? false;
+
+          // Whether emojiDatasets has DateTime key which is equal to this HeatMapContainer's date.
+          final isDateInEmojiDataset =
+              emojiDatasets?.keys.contains(currentDate) ?? false;
 
           // If the day is not a empty one then create HeatMapContainer.
           return HeatMapContainer(
@@ -138,8 +142,7 @@ class HeatMapCalendarRow extends StatelessWidget {
             // start day of week value and end day of week.
             //
             // So we have to give every day information to each HeatMapContainer.
-            date: DateTime(startDate.year, startDate.month,
-                startDate.day - startDate.weekday % 7 + i),
+            date: currentDate,
             backgroundColor: defaultColor,
             size: size,
             fontSize: fontSize,
@@ -158,26 +161,19 @@ class HeatMapCalendarRow extends StatelessWidget {
                     // Color the container with first value of colorsets
                     // and set opacity value to current day's datasets key
                     // devided by maxValue which is the maximum value of the month.
-                    ? colorsets?.values.first.withOpacity((datasets?[DateTime(
-                                startDate.year,
-                                startDate.month,
-                                startDate.day + i - (startDate.weekday % 7))] ??
-                            1) /
-                        (maxValue ?? 1))
+                    ? colorsets?.values.first.withOpacity(
+                        (datasets?[currentDate] ?? 1) / (maxValue ?? 1))
                     // Else if colorMode is ColorMode.Color.
                     //
                     // Get color value from colorsets which is filtered with DateTime value
                     // Using DatasetsUtil.getColor()
-                    : DatasetsUtil.getColor(
-                        colorsets,
-                        datasets?[DateTime(startDate.year, startDate.month,
-                            startDate.day + i - (startDate.weekday % 7))])
+                    : DatasetsUtil.getColor(colorsets, datasets?[currentDate])
                 : null,
+            // Use emoji if emojisets is provided and the date is in emojiDatasets
             customText: emojisets != null && isDateInEmojiDataset
                 ? DatasetsUtil.getEmoji(
                     emojisets,
-                    emojiDatasets?[DateTime(startDate.year, startDate.month,
-                        startDate.day + i - (startDate.weekday % 7))],
+                    emojiDatasets?[currentDate],
                   )
                 : null,
             customTextSize: emojiSize,
