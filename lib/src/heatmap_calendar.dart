@@ -179,6 +179,14 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
 
   /// Header widget which shows left, right buttons and year/month text.
   Widget _header(BuildContext context) {
+    final monthLabelWidget = Text(
+      DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
+          .format(_currentDate!),
+      style: TextStyle(
+        fontSize: widget.monthFontSize ?? 12,
+      ),
+    );
+
     return widget.allowMonthChange
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,14 +201,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
               ),
 
               // Text which shows the current year and month
-              if (_currentDate != null)
-                Text(
-                  DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
-                      .format(_currentDate!),
-                  style: TextStyle(
-                    fontSize: widget.monthFontSize ?? 12,
-                  ),
-                ),  
+              if (_currentDate != null) monthLabelWidget,
 
               // Next month button.
 
@@ -214,17 +215,7 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             ],
           )
         : widget.showMonthLabel
-            ? Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-                child: Text(
-                  DateUtil.MONTH_LABEL[_currentDate?.month ?? 0] +
-                      ' ' +
-                      (_currentDate?.year).toString(),
-                  style: TextStyle(
-                    fontSize: widget.monthFontSize ?? 12,
-                  ),
-                ))
+            ? monthLabelWidget
             : const SizedBox.shrink();
   }
 
