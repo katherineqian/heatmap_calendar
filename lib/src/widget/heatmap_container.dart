@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../data/heatmap_color.dart';
 
 class HeatMapContainer extends StatelessWidget {
@@ -63,9 +62,6 @@ class HeatMapContainer extends StatelessWidget {
                       color: textColor ?? const Color(0xFF8A8A8A),
                       fontSize: customText != null ? customTextSize : fontSize,
                     ),
-                    semanticsLabel: DateFormat.yMMMMEEEEd(
-                            Localizations.localeOf(context).languageCode)
-                        .format(date),
                   )
                 : null,
           ),

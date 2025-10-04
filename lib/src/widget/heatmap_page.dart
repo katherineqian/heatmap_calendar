@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import './heatmap_month_text.dart';
 import './heatmap_column.dart';
 import '../data/heatmap_color_mode.dart';
@@ -126,9 +125,9 @@ class HeatMapPage extends StatelessWidget {
         // which is used to show the 12 month labels.
         _localizedWeekDayLabels.add('');
         for (var i = 0; i < 7; i++) {
-          _localizedWeekDayLabels.add(
-              DateFormat.E(Localizations.localeOf(context).languageCode)
-                  .format(DateUtil.changeDay(firstDay, i)));
+          // Using DateUtil.WEEK_LABEL with appropriate index
+          int dayIndex = ((weekStartsWith - 1 + i) % 7) + 1;
+          _localizedWeekDayLabels.add(DateUtil.WEEK_LABEL[dayIndex]);
         }
       }
 
@@ -161,9 +160,8 @@ class HeatMapPage extends StatelessWidget {
         ));
 
         // also add first day's month information to _firstDayInfos list.
-        _firstDayInfos.add(
-            DateFormat.MMM(Localizations.localeOf(context).languageCode)
-                .format(firstDay));
+        // Use the DateUtil.SHORT_MONTH_LABEL instead of localization
+        _firstDayInfos.add(DateUtil.SHORT_MONTH_LABEL[firstDay.month]);
       }
     }
 

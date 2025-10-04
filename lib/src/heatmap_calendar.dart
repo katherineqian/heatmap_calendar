@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import './data/heatmap_color_mode.dart';
 import './widget/heatmap_calendar_page.dart';
 import './widget/heatmap_color_tip.dart';
@@ -154,8 +153,6 @@ class HeatMapCalendar extends StatefulWidget {
 class _HeatMapCalendar extends State<HeatMapCalendar> {
   // The DateTime value of first day of the current month.
   DateTime? _currentDate;
-  // The list of localized labels for week days.
-  final List<String> _localizedWeekDayLabels = [];
 
   @override
   void initState() {
@@ -179,14 +176,6 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
 
   /// Header widget which shows left, right buttons and year/month text.
   Widget _header(BuildContext context) {
-    final monthLabelWidget = Text(
-      DateFormat.yMMMM(Localizations.localeOf(context).languageCode)
-          .format(_currentDate!),
-      style: TextStyle(
-        fontSize: widget.monthFontSize ?? 12,
-      ),
-    );
-
     return widget.allowMonthChange
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,7 +190,10 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
               ),
 
               // Text which shows the current year and month
-              if (_currentDate != null) monthLabelWidget,
+              if (_currentDate != null)
+                Text(
+                    '${DateUtil.MONTH_LABEL[_currentDate?.month ?? 0]} ${_currentDate?.year}',
+                    style: TextStyle(fontSize: widget.monthFontSize ?? 12)),
 
               // Next month button.
 
@@ -215,42 +207,48 @@ class _HeatMapCalendar extends State<HeatMapCalendar> {
             ],
           )
         : widget.showMonthLabel
-            ? monthLabelWidget
+            ? Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+                child: Text(
+                  '${DateUtil.MONTH_LABEL[_currentDate?.month ?? 0]} ${_currentDate?.year}',
+                  style: TextStyle(
+                    fontSize: widget.monthFontSize ?? 12,
+                  ),
+                ))
             : const SizedBox.shrink();
   }
 
   Widget _weekLabel(BuildContext context) {
-    if (_localizedWeekDayLabels.isEmpty && _currentDate != null) {
-      final firstWeekDayIndex =
-          -((_currentDate!.weekday - widget.weekStartsWith) % 7);
-      for (var i = firstWeekDayIndex; i < firstWeekDayIndex + 7; i++) {
-        _localizedWeekDayLabels.add(
-            DateFormat.E(Localizations.localeOf(context).languageCode)
-                .format(DateUtil.changeDay(_currentDate!, i)));
-      }
+    final orderedWeekdayLabels = [];
+
+// Use widget.weekStartsWith to determine the order of the week labels
+    for (int i = 0; i < 7; i++) {
+      int dayIndex = ((widget.weekStartsWith - 1 + i) % 7);
+      orderedWeekdayLabels.add(DateUtil.WEEK_LABEL[dayIndex]);
     }
 
     return Padding(
       padding: widget.weekLabelPadding ?? EdgeInsets.zero,
       child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        for (String label in _localizedWeekDayLabels)
-          WidgetUtil.flexibleContainer(
-            widget.flexible ?? false,
-            false,
-            Container(
-              margin: EdgeInsets.only(
-                  left: widget.margin?.left ?? 2,
-                  right: widget.margin?.right ?? 2),
-              width: widget.size ?? 42,
-              alignment: Alignment.center,
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: widget.weekFontSize ?? 12,
-                  color: widget.weekTextColor ?? const Color(0xFF758EA1),
-                ),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          for (String label in orderedWeekdayLabels)
+            WidgetUtil.flexibleContainer(
+              widget.flexible ?? false,
+              false,
+              Container(
+                margin: EdgeInsets.only(
+                    left: widget.margin?.left ?? 2,
+                    right: widget.margin?.right ?? 2),
+                width: widget.size ?? 42,
+                alignment: Alignment.center,
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: widget.weekFontSize ?? 12,
+                    color: widget.weekTextColor ?? const Color(0xFF758EA1),
+                  ),
                 ),
               ),
             ),
