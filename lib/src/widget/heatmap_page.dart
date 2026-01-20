@@ -126,7 +126,7 @@ class HeatMapPage extends StatelessWidget {
         _localizedWeekDayLabels.add('');
         for (var i = 0; i < 7; i++) {
           // Using DateUtil.WEEK_LABEL with appropriate index
-          int dayIndex = ((weekStartsWith - 1 + i) % 7) + 1;
+          int dayIndex = ((weekStartsWith - 1 + i) % 7);
           _localizedWeekDayLabels.add(DateUtil.WEEK_LABEL[dayIndex]);
         }
       }
